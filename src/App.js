@@ -1,5 +1,6 @@
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 
+
 import './App.css';
 import MovieTitle from "./components/Heading/Title";
 import MovieDetails from "./components/MovieDetail/MovieDetail";
@@ -22,7 +23,6 @@ function App() {
 
         </Switch>
       </BrowserRouter>
-
   );
 }
 
