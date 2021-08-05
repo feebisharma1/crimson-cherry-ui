@@ -4,7 +4,7 @@ import {BrowserRouter, Switch, Route} from "react-router-dom";
 import './App.css';
 import MovieTitle from "./components/Heading/Title";
 import MovieDetails from "./components/MovieDetail/MovieDetail";
-import PageNotFound from "./components/PageNotFoune/PageNotFound";
+import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 
 function App() {
