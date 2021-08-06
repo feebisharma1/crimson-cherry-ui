@@ -60,7 +60,7 @@ const AddActors = (props) => {
 
     if(message){
         return(
-            <h1>"Thank you for submitting an actor"</h1> 
+            <h2 className="myMsg">Thank you for submitting an actor!</h2> 
         )
     };
 
@@ -76,37 +76,16 @@ const AddActors = (props) => {
             <label htmlFor="fname">Birthday: </label>
             <input type="text" id="birthday" name="birthday" onChange={handleChange}/><br></br>
             <label htmlFor="fname">Children: </label>
-            <input type="text" id="birthday" name="birthday" onChange={handleChange}/><br></br>
+            <input type="text" id="children" name="children" onChange={handleChange}/><br></br>
             <label htmlFor="fname">Height: </label>
             <input type="text" id="height" name="height" onChange={handleChange}/><br></br>
-            <input type="submit" value="submit"/>
+            <input type="submit" value="Submit"/>
         </form>
         )
+    }  
+    else {
+        setMessage(null);
     }
-
-        
-        // message && <h1>"Thank you for submitting an actor"</h1>
-        // props.isThereMessage && 
-        //     message ?
-        //     <h1>"Thank you for submitting an actor"</h1>
-        //     :
-        // <form onSubmit={handleSubmit} className="myBorder">
-        //     <label htmlFor="fname">Full Name: </label>
-        //     <input type="text" id="fname" name="name" onChange={handleChange}/><br></br>
-        //     <label htmlFor="fname">Sex: </label>
-        //     <input type="text" id="sex" name="sex" onChange={handleChange}/><br></br>
-        //     <label htmlFor="fname">Home Town: </label>
-        //     <input type="text" id="hometown" name="hometown" onChange={handleChange}/><br></br>
-        //     <label htmlFor="fname">Birthday: </label>
-        //     <input type="text" id="birthday" name="birthday" onChange={handleChange}/><br></br>
-        //     <label htmlFor="fname">Children: </label>
-        //     <input type="text" id="birthday" name="birthday" onChange={handleChange}/><br></br>
-        //     <label htmlFor="fname">Height: </label>
-        //     <input type="text" id="height" name="height" onChange={handleChange}/><br></br>
-        //     <input type="submit" value="submit"/>
-        // </form>
-        
-    
 
 }
 

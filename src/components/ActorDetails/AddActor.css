@@ -8,6 +8,15 @@ input[type=text], select {
     box-sizing: border-box;
     
   }
+
+  .myMsg{
+    display: inline-block;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    box-sizing: border-box;
+    background-color: bisque;
+    padding: 30px;
+  }
   
   input[type="submit"] {
     width: 50%;
