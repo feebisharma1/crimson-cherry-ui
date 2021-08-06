@@ -1,11 +1,12 @@
 input[type=text], select {
     width: 30%;
-    padding: 12px 20px;
-    margin: 8px 0;
+    padding: 10px 10px;
+    margin: 8px 20px;
     display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
     box-sizing: border-box;
+    
   }
   
   input[type="submit"] {
@@ -25,7 +26,6 @@ input[type=text], select {
   
   div {
     border-radius: 5px;
-    background-color: #f2f2f2;
     padding: 20px;
   }
 
@@ -34,7 +34,15 @@ input[type=text], select {
     text-align: center;
   }
 
-  .myTable {
+  div.myTable {
     border-style: solid;
     align-items: center;
+    clear: both;
   }
+
+  th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
