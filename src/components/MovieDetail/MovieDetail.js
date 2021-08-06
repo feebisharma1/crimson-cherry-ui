@@ -4,6 +4,7 @@ import {Link, useHistory, useParams} from 'react-router-dom';
 import "./MovieDetail.css";
 import MovieSearch from "./MovieSearch";
 import {getMovieDetails, findMoviesByName, findMoviesByDirector} from "../../data/GetMovieDetails";
+import {addMovieReview} from "../../data/AddReview";
 
 
 const MovieDetails = () => {
@@ -19,6 +20,7 @@ const MovieDetails = () => {
     const [extraMovies, setExtraMovies] = useState(null);
     const [message, setMessageReal] = useState("");
     const [enterReviewMessage, setEnterReviewMessage] = useState("");
+    const [movieVersion, setMovieVersion] = useState(0);
 
     if (getDetailsForMovieId == null) {
         setGetDetailsForMovieId("");
@@ -56,6 +58,8 @@ const MovieDetails = () => {
             setMessageWrapper("Please search for the movie you want to view");
             return;
         }
+        const movieId = Number(movieId);
+
         setMessageWrapper("Loading movie details, please wait... (movieId " + movieId + ")");
         getMovieDetails(movieId)
             .then(
@@ -85,7 +89,7 @@ const MovieDetails = () => {
                 }
             );
     }
-    useEffect(() => {loadMovieDetailsById(getDetailsForMovieId) }, [getDetailsForMovieId]);
+    useEffect(() => {loadMovieDetailsById(getDetailsForMovieId) }, [getDetailsForMovieId, movieVersion]);
 
 
     // const loadMovieDetailsByName = (movieName) => {
@@ -159,7 +163,7 @@ const MovieDetails = () => {
         else {
             reviewList = movieDetails.reviews.map((review, index) =>
                 <Fragment>
-                    <tr className="movieInfo movieReviewInfo">
+                    <tr className="movieInfo movieReviewInfo" key={`reviewerName.${index}`}>
                         <td className="movieFieldHeader movieReviewerName">{review.reviewerName}</td>
                         <td className="movieInfo movieReviewInfo">
                             <div>
@@ -169,13 +173,13 @@ const MovieDetails = () => {
                             </div>
                         </td>
                     </tr>
-                    <tr className="movieInfo movieReviewInfo">
+                    <tr className="movieInfo movieReviewInfo" key={`synopsis.${index}`}>
                         <td colSpan="2" className="movieInfo movieReviewSynopsis">{review.synopsis}</td>
                     </tr>
-                    <tr className="movieInfo movieReviewInfo">
+                    <tr className="movieInfo movieReviewInfo" key={`review.${index}`}>
                         <td colSpan="2" className="movieInfo movieReviewField">{review.review}</td>
                     </tr>
-                    <tr className="movieInfo movieReviewSpacer">
+                    <tr className="movieInfo movieReviewSpacer" key={`spacer.${index}`} >
                         <td colSpan="2" className="movieInfo movieReviewSpacer">
                             <hr />
                         </td>
@@ -199,20 +203,30 @@ const MovieDetails = () => {
     const handleChange = (e) => {
         dispatch( { field : e.target.id, value : e.target.value });
     }
-    const { newReviewerName, newNumberOfStars, newSynopsis, newReviewText} = newReview;
+    console.log("Before destructuring new review.")
+    let { newReviewerName, newNumberOfStars, newSynopsis, newReviewText} = newReview;
+    console.log(newReview);
     const handleNewReviewSubmit = (e) => {
         e.preventDefault();
-        console.log("About to add movie review ", newReview);
-        // addNewTransaction(newTransaction)
-        //     .then( result => {
-        //         if (result.status === 200) {
-        //             setMessage("Saved okay with id ", result.data.id);
-        //         } else {
-        //             setMessage( "Something went wrong with status of ", result.status);
-        //         }
-        //     })
-        //     .catch(error => setMessage("Something went wrong! " + error));
+        const reviewToAdd = {...newReview, movieId : movieDetails.id}; // Add movieId to the review
+        console.log("About to add movie review ", reviewToAdd);
+        addMovieReview(reviewToAdd)
+            .then( result => {
+                if (result.status === 200) {
+                    setEnterReviewMessage("Thank you for submitting this review! ", result.data.id);
+                    setMovieVersion( movieVersion + 1); // increment version to force refresh
+                    // Clear out their old review
+                    dispatch( { field : "numberOfStars", value: 0});
+                    dispatch( { field : "synopsis", value: ""});
+                    dispatch( { field : "review", value: ""});
+                    // { newReviewerName, newNumberOfStars, newSynopsis, newReviewText} = newReview;
+                } else {
+                    setEnterReviewMessage( "Something went wrong saving your review. ", result.status);
+                }
+            })
+            .catch(error => setEnterReviewMessage("Something went wrong saving your review! " + error));
     };
+
 
     return(
         <Fragment>
@@ -314,7 +328,7 @@ const MovieDetails = () => {
                                             <label htmlFor="synopsis">Review Title</label>
                                         </td>
                                         <td className="enterReviewData">
-                                            <input type="text" className="enterReviewData" id="synopsis"  onChange={handleChange} value={newSynopsis} />
+                                            <input type="text" className="enterReviewData" id="synopsis"  onChange={handleChange}  />
                                         </td>
                                     </tr>
                                     <tr>
