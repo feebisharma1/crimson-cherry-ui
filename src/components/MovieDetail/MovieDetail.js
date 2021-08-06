@@ -4,6 +4,7 @@ import {Link, useHistory, useParams} from 'react-router-dom';
 import "./MovieDetail.css";
 import MovieSearch from "./MovieSearch";
 import {getMovieDetails, findMoviesByName, findMoviesByDirector} from "../../data/GetMovieDetails";
+import {addMovieReview} from "../../data/AddReview";
 
 
 const MovieDetails = () => {
@@ -15,13 +16,19 @@ const MovieDetails = () => {
     const history = useHistory();
     const [getDetailsForMovieId, setGetDetailsForMovieId] = useState(params.movieId);
     const [movieToSearchFor, setMovieToSearchFor] = useState("");
-    const [movieDetails, setMovieDetails] = useState(null);
+    const [movieDetails, setMovieDetailsReal] = useState(null);
     const [extraMovies, setExtraMovies] = useState(null);
     const [message, setMessageReal] = useState("");
     const [enterReviewMessage, setEnterReviewMessage] = useState("");
+    const [movieVersion, setMovieVersion] = useState(0);
 
     if (getDetailsForMovieId == null) {
         setGetDetailsForMovieId("");
+    }
+
+    const setMovieDetails = (value) => {
+        console.log("Setting movie details to: ", value);
+        setMovieDetailsReal(value);
     }
 
     const setMessageWrapper = (msg) => {
@@ -49,87 +56,84 @@ const MovieDetails = () => {
     }, [params.movieId]);
 
 
-    const loadMovieDetailsById = (movieId) => {
-        console.log("MovieDetails.loading details for movieId: ", movieId);
-        if (movieId == null || movieId === "") {
+    const loadMovieDetailsById = (movieIdOrName) => {
+        console.log("MovieDetails.loading details for movieIdOrName: ", movieIdOrName);
+        if (movieIdOrName == null || movieIdOrName === "") {
             setMovieDetails(null);
             setMessageWrapper("Please search for the movie you want to view");
             return;
         }
-        setMessageWrapper("Loading movie details, please wait... (movieId " + movieId + ")");
-        getMovieDetails(movieId)
-            .then(
-                response => {
-                    const movieInfo = response.data;
-                    console.log(movieInfo);
-                    if (movieInfo != null) {
-                        setMessageWrapper("");
-                        movieFound = true;
-                        setMovieDetails(movieInfo);
-                        setExtraMovies(null);
+        const movieIdNumber = Number(movieIdOrName);
+        if (movieIdNumber !== NaN && movieIdNumber > 0 ) {
+
+            setMessageWrapper("Loading movie details, please wait... (movieId " + movieIdOrName + ")");
+            getMovieDetails(movieIdOrName)
+                .then(
+                    response => {
+                        const movieInfo = response.data;
+                        console.log(movieInfo);
+                        if (movieInfo != null) {
+                            setMessageWrapper("");
+                            movieFound = true;
+                            setMovieDetails(movieInfo);
+                            setExtraMovies(null);
+                        } else {
+                            console.log("No movie returned...");
+                            setMessageWrapper("Sorry, but the movieId you requested was not found in our database.");
+                            setMovieDetails(null);
+                        }
                     }
-                    else {
-                        console.log("No movie returned...");
-                        setMessageWrapper("Sorry, but the movieId you requested was not found in our database.");
+                )
+                .catch(err => {
                         setMovieDetails(null);
+                        const msg = "We encountered an error getting your movie from our database. " +
+                            "Maybe the gremlins took over the computer room again..." +
+                            "We will try to rid ourselves of the gremlins and get it working, so please try again later!";
+                        setMessageWrapper(msg, err);
+                        fatalError = true;
                     }
-                }
-            )
-            .catch(err => {
-                    setMovieDetails(null);
-                    const msg = "We encountered an error getting your movie from our database. " +
-                        "Maybe the gremlins took over the computer room again..." +
-                        "We will try to rid ourselves of the gremlins and get it working, so please try again later!";
-                    setMessageWrapper(msg, err);
-                    fatalError = true;
-                }
-            );
+                );
+        }
+        else {
+            setMessageWrapper("Loading movie details, please wait... (movieName " + movieIdOrName + ")");
+            findMoviesByName(movieIdOrName)
+                .then(
+                    response => {
+                        const movieList = response.data;
+                        console.log(movieList);
+                        if (movieList != null && movieList.length > 0 ) {
+                            const firstMovie =  movieList[0];
+                            console.log("Found movies with a name of ", movieIdOrName);
+                            setMessageWrapper("");
+                            setMovieDetails(firstMovie);
+                            movieFound = true;
+                            console.log("MovieDetails is now: ", movieDetails);
+                            setExtraMovies(movieList);
+                        }
+                        else {
+                            console.log("No movie returned...");
+                            setMessageWrapper("Sorry, but the movieName you requested was not found in our database.");
+                            setMovieDetails(null);
+                        }
+                    }
+                )
+                .catch(err => {
+                        setMovieDetails(null);
+                        const msg = "We encountered an error getting your movie from our database. " +
+                            "Maybe the gremlins took over the computer room again..." +
+                            "We will try to rid ourselves of the gremlins and get it working, so please try again later!";
+                        setMessageWrapper(msg, err);
+                        fatalError = true;
+                    }
+                );
+        }
     }
-    useEffect(() => {loadMovieDetailsById(getDetailsForMovieId) }, [getDetailsForMovieId]);
-
-
-    // const loadMovieDetailsByName = (movieName) => {
-    //     console.log("MovieDetails.loading details for movieName: ", movieName);
-    //     if (movieName == null || movieName === "") {
-    //         setMovieDetails(null);
-    //         setMessageWrapper("Please search for the movie you want to view");
-    //         return;
-    //     }
-    //     setMessageWrapper("Loading movie details, please wait... (movieName " + movieName + ")");
-    //     findMoviesByName(movieName)
-    //         .then(
-    //             response => {
-    //                 const movieList = response.data;
-    //                 console.log(movieList);
-    //                 if (movieList != null && movieList.length > 0 ) {
-    //                     setMessageWrapper("");
-    //                     movieFound = true;
-    //                     setMovieDetails(movieList[0]);
-    //                     setExtraMovies(movieList);
-    //                 }
-    //                 else {
-    //                     console.log("No movie returned...");
-    //                     setMessageWrapper("Sorry, but the movieName you requested was not found in our database.");
-    //                     setMovieDetails(null);
-    //                 }
-    //             }
-    //         )
-    //         .catch(err => {
-    //                 setMovieDetails(null);
-    //                 const msg = "We encountered an error getting your movie from our database. " +
-    //                     "Maybe the gremlins took over the computer room again..." +
-    //                     "We will try to rid ourselves of the gremlins and get it working, so please try again later!";
-    //                 setMessageWrapper(msg, err);
-    //                 fatalError = true;
-    //             }
-    //         );
-    // }
-    // useEffect(() => {loadMovieDetailsByName(getDetailsForMovieId) }, [getDetailsForMovieId]);
+    useEffect(() => {loadMovieDetailsById(getDetailsForMovieId) }, [getDetailsForMovieId, movieVersion]);
 
 
     let actorList = "";
     let reviewList = "";
-    if (movieDetails != null && movieDetails.id == getDetailsForMovieId) {
+    if (movieDetails != null && (movieDetails.id == getDetailsForMovieId || movieDetails.name == getDetailsForMovieId )) {
         movieFound = true;
 
         if (movieDetails.actors.length === 0) {
@@ -159,7 +163,7 @@ const MovieDetails = () => {
         else {
             reviewList = movieDetails.reviews.map((review, index) =>
                 <Fragment>
-                    <tr className="movieInfo movieReviewInfo">
+                    <tr className="movieInfo movieReviewInfo" key={`reviewerName.${index}`}>
                         <td className="movieFieldHeader movieReviewerName">{review.reviewerName}</td>
                         <td className="movieInfo movieReviewInfo">
                             <div>
@@ -169,13 +173,13 @@ const MovieDetails = () => {
                             </div>
                         </td>
                     </tr>
-                    <tr className="movieInfo movieReviewInfo">
+                    <tr className="movieInfo movieReviewInfo" key={`synopsis.${index}`}>
                         <td colSpan="2" className="movieInfo movieReviewSynopsis">{review.synopsis}</td>
                     </tr>
-                    <tr className="movieInfo movieReviewInfo">
+                    <tr className="movieInfo movieReviewInfo" key={`review.${index}`}>
                         <td colSpan="2" className="movieInfo movieReviewField">{review.review}</td>
                     </tr>
-                    <tr className="movieInfo movieReviewSpacer">
+                    <tr className="movieInfo movieReviewSpacer" key={`spacer.${index}`} >
                         <td colSpan="2" className="movieInfo movieReviewSpacer">
                             <hr />
                         </td>
@@ -199,20 +203,32 @@ const MovieDetails = () => {
     const handleChange = (e) => {
         dispatch( { field : e.target.id, value : e.target.value });
     }
-    const { newReviewerName, newNumberOfStars, newSynopsis, newReviewText} = newReview;
+    const newReviewerName = newReview.reviewerName;
+    const newNumberOfStars = newReview.numberOfStars;
+    const newSynopsis = newReview.synopsis;
+    const newReviewText = newReview.review;
+
     const handleNewReviewSubmit = (e) => {
         e.preventDefault();
-        console.log("About to add movie review ", newReview);
-        // addNewTransaction(newTransaction)
-        //     .then( result => {
-        //         if (result.status === 200) {
-        //             setMessage("Saved okay with id ", result.data.id);
-        //         } else {
-        //             setMessage( "Something went wrong with status of ", result.status);
-        //         }
-        //     })
-        //     .catch(error => setMessage("Something went wrong! " + error));
+        const reviewToAdd = {...newReview, movieId : movieDetails.id}; // Add movieId to the review
+        console.log("About to add movie review ", reviewToAdd);
+        addMovieReview(reviewToAdd)
+            .then( result => {
+                if (result.status === 200) {
+                    setEnterReviewMessage("Thank you for submitting this review! ", result.data.id);
+                    setMovieVersion( movieVersion + 1); // increment version to force refresh
+                    // Clear out their old review
+                    dispatch( { field : "numberOfStars", value: 0});
+                    dispatch( { field : "synopsis", value: ""});
+                    dispatch( { field : "review", value: ""});
+                    // { newReviewerName, newNumberOfStars, newSynopsis, newReviewText} = newReview;
+                } else {
+                    setEnterReviewMessage( "Something went wrong saving your review. ", result.status);
+                }
+            })
+            .catch(error => setEnterReviewMessage("Something went wrong saving your review! " + error));
     };
+
 
     return(
         <Fragment>
@@ -258,10 +274,6 @@ const MovieDetails = () => {
                                 <tr className="movieInfo">
                                     <td className="movieFieldHeader">Budget</td>
                                     <td className="movieInfo">{movieDetails.budget}</td>
-                                </tr>
-                                <tr className="movieInfo">
-                                    <td className="movieFieldHeader" id="movieIdHeader">movieId</td>
-                                    <td className="movieInfo" id="movieIdField">{movieDetails.id}</td>
                                 </tr>
                                 <tr className="movieInfo">
                                     <td colSpan="2" className="moveDetailActorHeader">
@@ -314,7 +326,7 @@ const MovieDetails = () => {
                                             <label htmlFor="synopsis">Review Title</label>
                                         </td>
                                         <td className="enterReviewData">
-                                            <input type="text" className="enterReviewData" id="synopsis"  onChange={handleChange} value={newSynopsis} />
+                                            <input type="text" className="enterReviewData" id="synopsis"  onChange={handleChange}  value={newSynopsis} />
                                         </td>
                                     </tr>
                                     <tr>
