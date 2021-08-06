@@ -3,7 +3,7 @@ import {Link, useHistory, useParams} from 'react-router-dom';
 
 import "./MovieDetail.css";
 import MovieSearch from "./MovieSearch";
-import {getMovieDetails, findMoviesByName, findMoviesByDirector} from "../../data/GetMovieDetails";
+import {getMovieDetails, findMoviesByName} from "../../data/GetMovieDetails";
 import {addMovieReview} from "../../data/AddReview";
 
 
@@ -17,7 +17,6 @@ const MovieDetails = () => {
     const [getDetailsForMovieId, setGetDetailsForMovieId] = useState(params.movieId);
     const [movieToSearchFor, setMovieToSearchFor] = useState("");
     const [movieDetails, setMovieDetailsReal] = useState(null);
-    const [extraMovies, setExtraMovies] = useState(null);
     const [message, setMessageReal] = useState("");
     const [enterReviewMessage, setEnterReviewMessage] = useState("");
     const [movieVersion, setMovieVersion] = useState(0);
@@ -37,7 +36,7 @@ const MovieDetails = () => {
     }
 
     const displayDetailForMovie = (movieId) => {
-        if (movieId != null && movieId != "" ) {
+        if (movieId != null && movieId !== "" ) {
             setGetDetailsForMovieId(movieId);
             history.push(`/movie/${movieId}`);
         }
@@ -64,7 +63,7 @@ const MovieDetails = () => {
             return;
         }
         const movieIdNumber = Number(movieIdOrName);
-        if (movieIdNumber !== NaN && movieIdNumber > 0 ) {
+        if ( !isNaN(movieIdNumber) && movieIdNumber > 0 ) {
 
             setMessageWrapper("Loading movie details, please wait... (movieId " + movieIdOrName + ")");
             getMovieDetails(movieIdOrName)
@@ -76,7 +75,6 @@ const MovieDetails = () => {
                             setMessageWrapper("");
                             movieFound = true;
                             setMovieDetails(movieInfo);
-                            setExtraMovies(null);
                         } else {
                             console.log("No movie returned...");
                             setMessageWrapper("Sorry, but the movieId you requested was not found in our database.");
@@ -107,8 +105,9 @@ const MovieDetails = () => {
                             setMessageWrapper("");
                             setMovieDetails(firstMovie);
                             movieFound = true;
-                            console.log("MovieDetails is now: ", movieDetails);
-                            setExtraMovies(movieList);
+                            if (movieList.length > 1) {
+                                setMessageWrapper("It looks like there are more than one movie with this name.  Showing the first.");
+                            }
                         }
                         else {
                             console.log("No movie returned...");
@@ -133,7 +132,7 @@ const MovieDetails = () => {
 
     let actorList = "";
     let reviewList = "";
-    if (movieDetails != null && (movieDetails.id == getDetailsForMovieId || movieDetails.name == getDetailsForMovieId )) {
+    if (movieDetails != null && (movieDetails.id == getDetailsForMovieId || movieDetails.name === getDetailsForMovieId )) {
         movieFound = true;
 
         if (movieDetails.actors.length === 0) {

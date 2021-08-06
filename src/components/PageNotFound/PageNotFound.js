@@ -1,6 +1,5 @@
 import "./PageNotFound.css";
 import sadFaceEmoji from '../../sadFaceEmoji.png';
-import cherryLogo from "../../cherries.jpg";
 
 const PageNotFound = () =>
     <div className="pageNotFound">
