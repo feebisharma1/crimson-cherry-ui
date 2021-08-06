@@ -5,7 +5,7 @@ import ActorList from "./components/ActorDetails/ActorList";
 import AddActors from "./components/ActorDetails/AddActors";
 import MovieTitle from "./components/Heading/Title";
 import MovieDetails from "./components/MovieDetail/MovieDetail";
-import PageNotFound from "./components/PageNotFoune/PageNotFound";
+import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 function App() {
   return (
