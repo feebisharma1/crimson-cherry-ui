@@ -1,0 +1,20 @@
+.pageNotFound {
+    background-color: white;
+    clear: left;
+    text-align: center;
+    vertical-align: center;
+    padding: 0px;
+}
+div.pageNotFound {
+    clear: left;
+    text-align: center;
+    vertical-align: center;
+    background-color: white;
+    padding: 50px;
+    width: 100%;
+}
+table.pageNotFound {
+    text-align: center;
+    width: auto;
+    margin: 0 auto 0 auto;
+}

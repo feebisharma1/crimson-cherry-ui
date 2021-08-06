@@ -1,0 +1,17 @@
+.movieSearch {
+    width: 100%;
+    background-color: white;
+    clear: left;
+    text-align: center;
+    padding: 20px;
+}
+.searchBox label, input, button {
+
+}
+#movieKey {
+    margin: 0px 10px 0px 10px;
+}
+
+.searchBoxError {
+    color: darkred;
+}

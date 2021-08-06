@@ -1,0 +1,101 @@
+table.movieInfo {
+    margin: 0 auto 0 auto;
+}
+div.movieDetailMessage {
+    text-align: center;
+    width: 100%;
+    font-size: 1.5em;
+    font-width: bold;
+    color: darkred;
+}
+div.wantToAddMovie {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: normal;
+    color: black;
+    margin: 20px 0px 20px 0px;
+}
+h1.movieName {
+    color: darkred;
+    text-align: center;
+    margin: 10px 0px 10px 0px;
+}
+
+.movieInfo {
+    text-align: center;
+}
+td.movieFieldHeader {
+    color: black;
+    width: 300px;
+    text-align: right;
+    vertical-align: top;
+    padding-right: .5em;
+}
+td.movieInfo {
+    color: black;
+    width: 300px;
+    text-align: left;
+}
+#movieIdHeader {
+    color: lightgray;
+    xxxdisplay: none;
+}
+#movieIdField {
+    color: lightgray;
+    xxdisplay: none;
+}
+
+td.moveDetailActorHeader {
+    padding: 10px 0px 10px 0px;
+    background-color: #eee;
+    font-weight: bold;
+}
+td.moveDetailReviewHeader {
+    padding: 10px 0px 10px 0px;
+    background-color: #eee;
+    font-weight: bold;
+}
+td.movieReviewerName {
+    font-style: italic;
+    text-align: left;
+}
+td.movieReviewSynopsis {
+    font-weight: bolder;
+    text-align: left;
+}
+.reviewedStars {
+    float: left;
+    color: darkred;
+}
+.reviewedOn {
+    float: right;
+}
+
+div.enterReview {
+    text-align: center;
+ }
+table.enterReview {
+    margin: 0 auto 0 auto;
+}
+td.enterReviewData {
+    text-align: left;
+}
+td.enterReviewLabel {
+    text-align: right;
+    vertical-align: top;
+}
+.enterReviewData {
+    width: 400px;
+}
+.reviewTextArea {
+    width: 400px;
+    height: 5em;
+}
+.enterNumberOfStars {
+    width: 50px;
+    text-align: center;
+}
+#submitReview {
+    padding: 10px 15px 10px 15px;
+    color: darkred;
+}

@@ -1,10 +1,71 @@
 .movieTitle {
     text-align: center;
     margin: 0;
+    vertical-align: center;
+}
+a.movieTitle {
+    text-decoration: none;
+    color: darkred;
+}
+.movieTitle:hover {
+    text-decoration: none;
+}
+a.movieTitle:visited {
+    text-decoration: none;
+}
+div.movieTitle {
+    background-color: white;
+    vertical-align: center;
+}
+#cherryLogo {
+    vertical-align: center;
+}
+li.navMenu {
+    display: block;
+    width: 10em;
+    background: white;
+    padding: 5px 20px 5px 20px;
+    margin: 0;
+}
+div.navMenu {
+    float: left;
+    margin-left: 0;
+    border: 20px solid #eee;;
 }
 .navMenu {
     margin: 0;
     padding: 0;
     text-align: left;
     list-style-type: none;
+}
+li.navMenu {
+    display: block;
+    width: 10em;
+    background: #eee;
+    padding: 5px 20px 5px 20px;
+    margin: 0;
+    text-decoration: none;
+    color: black;
+}
+li.navMenu:hover {
+    xxbackground-color: #fee;
+    font-weight: bold;
+    color: darkred;
+}
+a.navMenu {
+    text-decoration: none;
+}
+a.navMenu:visited {
+    color:black;
+}
+a.navMenu:visited:hover {
+    color:darkred;
+}
+#menuHeader {
+    background-color: darkred;
+    color: white;
+    text-align: center;
+}
+#menuHeader:hover {
+    font-weight: normal;
 }
