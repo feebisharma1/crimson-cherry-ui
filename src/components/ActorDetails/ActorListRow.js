@@ -1,4 +1,4 @@
-
+import './AddActor.css'
 const ActorListRow = (props) => {
     return(
         <>
