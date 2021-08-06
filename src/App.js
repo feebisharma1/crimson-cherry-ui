@@ -7,6 +7,7 @@ import MovieTitle from "./components/Heading/Title";
 import MovieDetails from "./components/MovieDetail/MovieDetail";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 import MovieList from "./components/MovieList/MovieList";
+import AddMovie from "./components/AddMovie/AddMovie";
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
             <Route path="/" exact={true}>
             <MovieList/>
         </Route>
+            <Route path="/addMovie" exact={true}>
+                <AddMovie/>
+            </Route>
           <Route>
             <PageNotFound />
           </Route>
