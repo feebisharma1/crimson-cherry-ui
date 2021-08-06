@@ -6,6 +6,7 @@ import AddActors from "./components/ActorDetails/AddActors";
 import MovieTitle from "./components/Heading/Title";
 import MovieDetails from "./components/MovieDetail/MovieDetail";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
+import MovieList from "./components/MovieList/MovieList";
 
 function App() {
   return (
@@ -21,9 +22,13 @@ function App() {
           <Route path={"/addActor"}>
             <AddActors />
           </Route>
+            <Route path="/" exact={true}>
+            <MovieList/>
+        </Route>
           <Route>
             <PageNotFound />
           </Route>
+
         </Switch>
       </BrowserRouter>
 
