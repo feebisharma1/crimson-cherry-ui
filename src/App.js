@@ -8,6 +8,7 @@ import MovieDetails from "./components/MovieDetail/MovieDetail";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 function App() {
+  const isThereMessage = true;
   return (
       <BrowserRouter>
         <MovieTitle />
@@ -19,7 +20,7 @@ function App() {
             <ActorList />
           </Route>
           <Route path={"/addActor"}>
-            <AddActors />
+            <AddActors isThereMessage={isThereMessage}/>
           </Route>
           <Route>
             <PageNotFound />

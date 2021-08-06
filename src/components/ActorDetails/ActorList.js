@@ -25,7 +25,7 @@ const ActorList = () => {
     }
 
     return (
-        <div>
+        <div className= "myTable">
             <label>Select an Actor by their Name: </label>
             <select onChange={handleChange}>
                 <option>--Choose Option---</option>
