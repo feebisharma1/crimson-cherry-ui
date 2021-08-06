@@ -29,19 +29,24 @@ const AddMovie = () => {
 
     const handleNewMovieSubmit = (e) => {
         e.preventDefault();
+        if(newMovie.name != "") {
         addMovie(newMovie)
             .then(result => {
-                if (result.status === 200) {
-                    setEnterMovieMessage("Movie added ", result.data.id);
-                    setMovieVersion(0); // increment version to force refresh
-                    dispatch({field: "director", value: ""});
-                    dispatch({field: "studio", value: ""});
-                    dispatch({field: "year", value: ""});
-                } else {
-                    setEnterMovieMessage("Something went wrong saving your review. ", result.status);
-                }
+                    if (result.status === 200) {
+                        setEnterMovieMessage("Movie added ", result.data.id);
+                        setMovieVersion(0); // increment version to force refresh
+                        dispatch({field: "name", value: ""});
+                        dispatch({field: "director", value: ""});
+                        dispatch({field: "studio", value: ""});
+                        dispatch({field: "year", value: ""});
+                    } else {
+
+                        setEnterMovieMessage("Something went wrong saving your review. ", result.status);
+                    }
             })
             .catch(error => setEnterMovieMessage("Something went wrong saving your review! " + error));
+    }
+    else{setEnterMovieMessage("Something went wrong saving your review. ");}
     };
     return(
         <Fragment>
